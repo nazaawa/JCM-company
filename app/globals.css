@@ -1,0 +1,77 @@
+:root {
+  --bg: #f7f5f0;
+  --text: #1a1a1a;
+  --accent: #8b4513;
+  --section-alt: #efebe1;
+  --font-serif: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-mono: "Menlo", "Consolas", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Sliding underline on links */
+.link-underline {
+  text-decoration: none;
+  background-image: linear-gradient(var(--text), var(--text));
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 0% 1px;
+  transition: background-size 0.25s ease;
+  padding-bottom: 3px;
+}
+.link-underline:hover {
+  background-size: 100% 1px;
+}
+
+/* Solid dark button that shifts to accent on hover */
+.btn-solid {
+  background: var(--text);
+  color: var(--bg);
+  transition: background 0.2s ease;
+}
+.btn-solid:hover {
+  background: var(--accent);
+}
+
+/* Stack the hero on narrow screens (the two-column grid has a 280px
+   minimum that would otherwise overflow small phones). */
+@media (max-width: 720px) {
+  .hero {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
