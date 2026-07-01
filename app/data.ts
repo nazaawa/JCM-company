@@ -3,6 +3,24 @@
 
 export const ACCENT = "#8B4513";
 
+// --- Imagery (Lorem Picsum) -----------------------------------------------
+// Placeholder photos from Lorem Picsum (https://picsum.photos). Seeded URLs
+// are deterministic and always resolve — no API key required. Grayscale keeps
+// the imagery sober and consistent with the firm's warm, minimal palette.
+//
+// NOTE: this build sandbox blocks external image hosts, so images can't be
+// render-tested here — they load fine once the site runs outside the sandbox.
+// Each <FallbackImage> degrades to the original placeholder if a URL fails.
+// Swap any photo by changing its seed, or point src at a real photo later.
+export const picsumSrc = (seed: string, w: number, h: number, grayscale = true) =>
+  `https://picsum.photos/seed/${seed}/${w}/${h}${grayscale ? "?grayscale" : ""}`;
+
+export const heroImage = {
+  seed: "jcm-cabinet-gombe",
+  alt: "Ambiance du cabinet — image de démonstration (Lorem Picsum), à remplacer par une photo réelle de Gombe, Kinshasa",
+  src: picsumSrc("jcm-cabinet-gombe", 900, 1125),
+};
+
 export type Domain = {
   num: string;
   title: string;
@@ -49,6 +67,7 @@ export type Member = {
   role: string;
   specialty: string;
   photoAlt: string;
+  photoSeed: string;
 };
 
 export const team: Member[] = [
@@ -58,6 +77,7 @@ export const team: Member[] = [
     specialty: "Droit des affaires et arbitrage OHADA.",
     photoAlt:
       "Photo de Maître Jean-Claude Mbala — à remplacer par portrait professionnel",
+    photoSeed: "jcm-mbala",
   },
   {
     name: "Maître Adèle Nsimba",
@@ -65,6 +85,7 @@ export const team: Member[] = [
     specialty: "Droit pénal et droit du travail.",
     photoAlt:
       "Photo de Maître Adèle Nsimba — à remplacer par portrait professionnel",
+    photoSeed: "jcm-nsimba",
   },
   {
     name: "Maître Patrick Kalonji",
@@ -72,6 +93,7 @@ export const team: Member[] = [
     specialty: "Droit immobilier et foncier.",
     photoAlt:
       "Photo de Maître Patrick Kalonji — à remplacer par portrait professionnel",
+    photoSeed: "jcm-kalonji",
   },
   {
     name: "Maître Grace Ilunga",
@@ -79,6 +101,7 @@ export const team: Member[] = [
     specialty: "Droit de la famille et successions.",
     photoAlt:
       "Photo de Maître Grace Ilunga — à remplacer par portrait professionnel",
+    photoSeed: "jcm-ilunga",
   },
 ];
 

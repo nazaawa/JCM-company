@@ -1,10 +1,40 @@
 "use client";
 
-import { CSSProperties, useState } from "react";
-import { ACCENT, domains, team, fees } from "./data";
+import { CSSProperties, ReactNode, useState } from "react";
+import { ACCENT, domains, team, fees, heroImage, picsumSrc } from "./data";
 
 const serif: CSSProperties = { fontFamily: "var(--font-serif)" };
 const mono: CSSProperties = { fontFamily: "var(--font-mono)" };
+
+// Renders a remote image that swaps back to `fallback` if it fails to load,
+// so a blocked/missing URL never produces a broken-image icon.
+function FallbackImage({
+  src,
+  alt,
+  fallback,
+}: {
+  src: string;
+  alt: string;
+  fallback: ReactNode;
+}) {
+  const [failed, setFailed] = useState(false);
+  if (failed) return <>{fallback}</>;
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      onError={() => setFailed(true)}
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        display: "block",
+      }}
+    />
+  );
+}
 
 export default function Home() {
   const [view, setView] = useState<"tableau" | "editorial">("tableau");
@@ -200,8 +230,6 @@ export default function Home() {
           </div>
         </div>
         <div
-          role="img"
-          aria-label="Emplacement réservé — photo d'ambiance du cabinet ou du quartier de Gombe, Kinshasa, à intégrer"
           style={{
             position: "relative",
             aspectRatio: "4/5",
@@ -211,54 +239,62 @@ export default function Home() {
             background: "#F7F5F0",
           }}
         >
-          <svg
-            width="100%"
-            height="100%"
-            viewBox="0 0 400 500"
-            preserveAspectRatio="none"
-            style={{ display: "block" }}
-          >
-            <defs>
-              <pattern
-                id="heroStripe"
-                width="18"
-                height="18"
-                patternTransform="rotate(45)"
-                patternUnits="userSpaceOnUse"
-              >
-                <rect width="18" height="18" fill="#F1EBDD" />
-                <rect width="9" height="18" fill="#E7DFCC" />
-              </pattern>
-            </defs>
-            <rect width="400" height="500" fill="url(#heroStripe)" />
-          </svg>
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              textAlign: "center",
-              padding: 24,
-            }}
-          >
-            <span
-              style={{
-                ...mono,
-                fontSize: 12,
-                letterSpacing: "0.04em",
-                color: "rgba(26,26,26,0.55)",
-                background: "#F7F5F0",
-                padding: "8px 12px",
-                border: "1px solid rgba(26,26,26,0.15)",
-              }}
-            >
-              photo — façade ou salle de réception
-              <br />
-              du cabinet, Gombe, Kinshasa
-            </span>
-          </div>
+          <FallbackImage
+            src={heroImage.src}
+            alt={heroImage.alt}
+            fallback={
+              <>
+                <svg
+                  width="100%"
+                  height="100%"
+                  viewBox="0 0 400 500"
+                  preserveAspectRatio="none"
+                  style={{ display: "block" }}
+                >
+                  <defs>
+                    <pattern
+                      id="heroStripe"
+                      width="18"
+                      height="18"
+                      patternTransform="rotate(45)"
+                      patternUnits="userSpaceOnUse"
+                    >
+                      <rect width="18" height="18" fill="#F1EBDD" />
+                      <rect width="9" height="18" fill="#E7DFCC" />
+                    </pattern>
+                  </defs>
+                  <rect width="400" height="500" fill="url(#heroStripe)" />
+                </svg>
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    padding: 24,
+                  }}
+                >
+                  <span
+                    style={{
+                      ...mono,
+                      fontSize: 12,
+                      letterSpacing: "0.04em",
+                      color: "rgba(26,26,26,0.55)",
+                      background: "#F7F5F0",
+                      padding: "8px 12px",
+                      border: "1px solid rgba(26,26,26,0.15)",
+                    }}
+                  >
+                    photo — façade ou salle de réception
+                    <br />
+                    du cabinet, Gombe, Kinshasa
+                  </span>
+                </div>
+              </>
+            }
+          />
         </div>
       </section>
 
@@ -395,31 +431,44 @@ export default function Home() {
             {team.map((member) => (
               <div key={member.name}>
                 <div
-                  role="img"
-                  aria-label={member.photoAlt}
                   style={{
+                    position: "relative",
                     aspectRatio: "3/4",
                     border: "1px solid rgba(26,26,26,0.18)",
                     background: "#F7F5F0",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    textAlign: "center",
-                    padding: 18,
+                    overflow: "hidden",
                     marginBottom: 16,
                   }}
                 >
-                  <span
-                    style={{
-                      ...mono,
-                      fontSize: "11.5px",
-                      lineHeight: 1.5,
-                      color: "rgba(26,26,26,0.55)",
-                      letterSpacing: "0.01em",
-                    }}
-                  >
-                    {member.photoAlt}
-                  </span>
+                  <FallbackImage
+                    src={picsumSrc(member.photoSeed, 600, 800)}
+                    alt={member.photoAlt}
+                    fallback={
+                      <div
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          textAlign: "center",
+                          padding: 18,
+                        }}
+                      >
+                        <span
+                          style={{
+                            ...mono,
+                            fontSize: "11.5px",
+                            lineHeight: 1.5,
+                            color: "rgba(26,26,26,0.55)",
+                            letterSpacing: "0.01em",
+                          }}
+                        >
+                          {member.photoAlt}
+                        </span>
+                      </div>
+                    }
+                  />
                 </div>
                 <h3
                   style={{
@@ -1055,6 +1104,17 @@ export default function Home() {
         }}
       >
         <span>JCM Conseil &amp; Partners — Gombe, Kinshasa, RDC</span>
+        <span>
+          Images de démonstration&nbsp;:{" "}
+          <a
+            href="https://picsum.photos"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: "underline" }}
+          >
+            Lorem Picsum
+          </a>
+        </span>
         <span>© 2026 — Tous droits réservés</span>
       </footer>
     </div>
